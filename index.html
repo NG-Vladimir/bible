@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Bible Tracker - Genesis & Exodus</title>
+    <title>BIBLE TRACKER - OLD TESTAMENT</title>
     <style>
         :root {
             --hex-w: 42px; 
@@ -20,38 +20,54 @@
         body {
             background: linear-gradient(180deg, #ffffff 0%, var(--bg-page) 100%);
             margin: 0; padding: 0; font-family: -apple-system, system-ui, sans-serif;
-            display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #1c1c1e;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #1c1c1e; overflow-x: hidden;
         }
 
+        /* Шапка с меню */
         header {
-            width: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px);
-            position: sticky; top: 0; z-index: 1000; padding: 16px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1);
-            text-align: center;
+            width: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 1000; padding: 12px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1);
         }
 
-        .nav-container { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 8px; }
+        .nav-header { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; max-width: 500px; margin: 0 auto; }
         
-        .nav-btn {
-            background: none; border: none; font-size: 24px; color: #d1d1d6; cursor: pointer;
-            padding: 0 10px; transition: color 0.3s;
-        }
-        .nav-btn:active { color: var(--hex-active); }
-
-        .book-title { font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: #000; }
+        .menu-btn { background: none; border: none; font-size: 10px; font-weight: 800; color: #8e8e93; letter-spacing: 1.5px; cursor: pointer; text-transform: uppercase; }
+        
+        .book-title { font-size: 19px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: #000; text-align: center; flex-grow: 1; }
 
         .switch-container {
             display: flex; align-items: center; justify-content: center;
-            gap: 10px; font-size: 10px; font-weight: 700; color: #8e8e93;
-            text-transform: uppercase; letter-spacing: 0.8px;
+            gap: 10px; font-size: 9px; font-weight: 700; color: #8e8e93;
+            text-transform: uppercase; letter-spacing: 0.8px; margin-top: 8px;
         }
 
-        .switch { position: relative; width: 40px; height: 22px; }
+        .switch { position: relative; width: 36px; height: 20px; }
         .switch input { opacity: 0; width: 0; height: 0; }
         .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #d1d1d6; transition: .4s; border-radius: 34px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--hex-active); }
-        input:checked + .slider:before { transform: translateX(18px); }
+        input:checked + .slider:before { transform: translateX(16px); }
 
+        /* Меню (Overlay) */
+        .menu-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            z-index: 2000; display: none; flex-direction: column; padding: 40px 20px;
+            overflow-y: auto;
+        }
+
+        .menu-header { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+        .close-btn { background: none; border: none; font-size: 24px; color: #8e8e93; font-weight: 300; }
+
+        .menu-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .menu-item {
+            padding: 15px; border-radius: 15px; background: #f2f2f7; text-align: center;
+            font-size: 11px; font-weight: 700; color: #3a3a3c; text-transform: uppercase; letter-spacing: 1px;
+            transition: 0.2s;
+        }
+        .menu-item:active { background: var(--hex-active); color: white; }
+
+        /* Контейнер приложения */
         .app-container {
             background: #ffffff; margin: 20px 15px; padding: 40px 20px;
             border-radius: 35px; box-shadow: 0 10px 40px rgba(0,0,0,0.03);
@@ -79,30 +95,35 @@
         }
 
         .checked .hexagon-inner { background: var(--gold-gradient); color: #ffffff; animation: honeyPulse 3s infinite ease-in-out; }
-
-        @keyframes honeyPulse { 0% { filter: brightness(1); } 50% { filter: brightness(1.15); } 100% { filter: brightness(1); } }
+        @keyframes honeyPulse { 0% { filter: brightness(1); } 50% { filter: brightness(1.1); } 100% { filter: brightness(1); } }
 
         .info-panel {
             margin-top: 15px; padding: 12px 25px; background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(10px); border-radius: 18px; border: 0.5px solid rgba(255, 255, 255, 0.5);
             text-align: center; min-width: 160px;
         }
-        .info-text { font-size: 11px; font-weight: 700; color: #8e8e93; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
+        .info-text { font-size: 11px; font-weight: 700; color: #8e8e93; text-transform: uppercase; letter-spacing: 1px; }
 
         .scripture-quote { margin: 30px 25px 50px; text-align: center; max-width: 300px; }
-        .quote-text { font-size: 16px; line-height: 1.5; font-weight: 300; color: #3a3a3c; }
+        .quote-text { font-size: 15px; line-height: 1.5; font-weight: 300; color: #3a3a3c; }
         .quote-text span { color: #ff9500; font-weight: 600; }
-        .quote-ref { font-size: 10px; font-weight: 800; color: #c7c7cc; text-transform: uppercase; letter-spacing: 2px; }
+        .quote-ref { font-size: 9px; font-weight: 800; color: #c7c7cc; text-transform: uppercase; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="nav-container">
-            <button class="nav-btn" onclick="changeBook(-1)">‹</button>
-            <div class="book-title" id="book-name">БЫТИЕ</div>
-            <button class="nav-btn" onclick="changeBook(1)">›</button>
+    <div class="menu-overlay" id="menu">
+        <div class="menu-header">
+            <button class="close-btn" onclick="toggleMenu()">✕</button>
         </div>
+        <div class="menu-list" id="menu-list"></div>
+    </div>
+
+    <header>
+        <div class="nav-header">
+            <button class="menu-btn" onclick="toggleMenu()">список</button>
+            <div class="book-title" id="book-name">БЫТИЕ</div>
+            <div style="width: 50px;"></div> </div>
         <div class="switch-container">
             <span>по порядку</span>
             <label class="switch">
@@ -128,83 +149,93 @@
 
     <script>
         const gridContainer = document.getElementById('grid');
+        const menuList = document.getElementById('menu-list');
+        const menuOverlay = document.getElementById('menu');
         const modeToggle = document.getElementById('mode-toggle');
         const infoText = document.getElementById('info-text');
         const bookTitle = document.getElementById('book-name');
 
-        const books = [
-            { name: 'БЫТИЕ', chapters: 50, key: 'genesis' },
-            { name: 'ИСХОД', chapters: 40, key: 'exodus' }
+        const bibleBooks = [
+            { name: 'БЫТИЕ', chapters: 50, id: 'gen' }, { name: 'ИСХОД', chapters: 40, id: 'exo' },
+            { name: 'ЛЕВИТ', chapters: 27, id: 'lev' }, { name: 'ЧИСЛА', chapters: 36, id: 'num' },
+            { name: 'ВТОРОЗАКОНИЕ', chapters: 34, id: 'deu' }, { name: 'ИИСУС НАВИН', chapters: 24, id: 'jos' },
+            { name: 'СУДЬИ', chapters: 21, id: 'jdg' }, { name: 'РУФЬ', chapters: 4, id: 'rut' },
+            { name: '1 ЦАРСТВ', chapters: 31, id: '1sa' }, { name: '2 ЦАРСТВ', chapters: 24, id: '2sa' },
+            { name: '3 ЦАРСТВ', chapters: 22, id: '1ki' }, { name: '4 ЦАРСТВ', chapters: 25, id: '2ki' },
+            { name: '1 ПАРАЛИПОМЕНОН', chapters: 29, id: '1ch' }, { name: '2 ПАРАЛИПОМЕНОН', chapters: 36, id: '2ch' },
+            { name: 'ЕЗДРА', chapters: 10, id: 'ezr' }, { name: 'НЕЕМИЯ', chapters: 13, id: 'neh' },
+            { name: 'ЕСФИРЬ', chapters: 10, id: 'est' }, { name: 'ИОВ', chapters: 42, id: 'job' },
+            { name: 'ПСАЛТИРЬ', chapters: 150, id: 'psa' }, { name: 'ПРИТЧИ', chapters: 31, id: 'pro' },
+            { name: 'ЕККЛЕСИАСТ', chapters: 12, id: 'ecc' }, { name: 'ПЕСНЯ ПЕСНЕЙ', chapters: 8, id: 'sng' },
+            { name: 'ИСАИЯ', chapters: 66, id: 'isa' }, { name: 'ИЕРЕМИЯ', chapters: 52, id: 'jer' },
+            { name: 'ПЛАЧ ИЕРЕМИИ', chapters: 5, id: 'lam' }, { name: 'ИЕЗЕКИИЛЬ', chapters: 48, id: 'ezk' },
+            { name: 'ДАНИИЛ', chapters: 12, id: 'dan' }, { name: 'ОСИЯ', chapters: 14, id: 'hos' },
+            { name: 'ИОИЛЬ', chapters: 3, id: 'jol' }, { name: 'АМОС', chapters: 9, id: 'amo' },
+            { name: 'АВДИЙ', chapters: 1, id: 'oba' }, { name: 'ИОНА', chapters: 4, id: 'jon' },
+            { name: 'МИХЕЙ', chapters: 7, id: 'mic' }, { name: 'НАУМ', chapters: 3, id: 'nam' },
+            { name: 'АВВАКУМ', chapters: 3, id: 'hab' }, { name: 'СОФОНИЯ', chapters: 3, id: 'zep' },
+            { name: 'АГГЕЙ', chapters: 2, id: 'hag' }, { name: 'ЗАХАРИЯ', chapters: 14, id: 'zec' },
+            { name: 'МАЛАХИЯ', chapters: 4, id: 'mal' }
         ];
 
-        let currentBookIndex = localStorage.getItem('current_book_idx') ? parseInt(localStorage.getItem('current_book_idx')) : 0;
-        const modeKey = 'bible_mode_mix_vNavigation';
+        let currentIdx = localStorage.getItem('last_book_v2') ? parseInt(localStorage.getItem('last_book_v2')) : 0;
+        
+        function toggleMenu() {
+            const isVisible = menuOverlay.style.display === 'flex';
+            menuOverlay.style.display = isVisible ? 'none' : 'flex';
+        }
 
-        modeToggle.checked = localStorage.getItem(modeKey) === 'true';
-
-        function changeBook(direction) {
-            currentBookIndex = (currentBookIndex + direction + books.length) % books.length;
-            localStorage.setItem('current_book_idx', currentBookIndex);
+        function selectBook(idx) {
+            currentIdx = idx;
+            localStorage.setItem('last_book_v2', idx);
+            toggleMenu();
             render();
         }
 
-        function getSaved(key) { return JSON.parse(localStorage.getItem('bible_progress_' + key)) || []; }
-
-        function updateInfo(bookName, num) {
-            infoText.style.opacity = '0';
-            setTimeout(() => {
-                infoText.innerText = `${bookName} ${num} ГЛАВА`;
-                infoText.style.opacity = '1';
-            }, 150);
+        function createMenuList() {
+            bibleBooks.forEach((book, idx) => {
+                const item = document.createElement('div');
+                item.className = 'menu-item';
+                item.innerText = book.name;
+                item.onclick = () => selectBook(idx);
+                menuList.appendChild(item);
+            });
         }
 
         function render() {
-            const currentBook = books[currentBookIndex];
-            bookTitle.innerText = currentBook.name;
+            const book = bibleBooks[currentIdx];
+            bookTitle.innerText = book.name;
             gridContainer.innerHTML = '';
-            
-            const saved = getSaved(currentBook.key);
-            let chapters = Array.from({length: currentBook.chapters}, (_, i) => i + 1);
-
-            localStorage.setItem(modeKey, modeToggle.checked);
+            const saved = JSON.parse(localStorage.getItem('bible_v2_' + book.id)) || [];
+            let chapters = Array.from({length: book.chapters}, (_, i) => i + 1);
 
             if (modeToggle.checked) {
-                let seed = currentBookIndex + 777; 
-                chapters.sort(() => {
-                    seed = (seed * 9301 + 49297) % 233280;
-                    return (seed / 233280) - 0.5;
-                });
+                let seed = currentIdx + 99;
+                chapters.sort(() => { seed = (seed * 9301 + 49297) % 233280; return (seed / 233280) - 0.5; });
             }
 
-            const perRow = 7;
-            for (let i = 0; i < chapters.length; i += perRow) {
-                const rowDiv = document.createElement('div');
-                rowDiv.className = 'hex-row';
-                rowDiv.style.animationDelay = (i / perRow) * 0.05 + 's';
-                
-                chapters.slice(i, i + perRow).forEach(num => {
+            for (let i = 0; i < chapters.length; i += 7) {
+                const row = document.createElement('div');
+                row.className = 'hex-row';
+                row.style.animationDelay = (i / 7) * 0.04 + 's';
+                chapters.slice(i, i + 7).forEach(num => {
                     const hex = document.createElement('div');
                     hex.className = 'hexagon' + (saved.includes(num) ? ' checked' : '');
                     hex.innerHTML = `<div class="hexagon-inner">${num}</div>`;
-                    hex.onclick = function() {
-                        let currentProgress = getSaved(currentBook.key);
-                        if (this.classList.contains('checked')) {
-                            this.classList.remove('checked');
-                            currentProgress = currentProgress.filter(n => n !== num);
-                        } else {
-                            this.classList.add('checked');
-                            if (!currentProgress.includes(num)) currentProgress.push(num);
-                            if (window.navigator.vibrate) window.navigator.vibrate(10);
-                        }
-                        localStorage.setItem('bible_progress_' + currentBook.key, JSON.stringify(currentProgress));
-                        updateInfo(currentBook.name, num);
+                    hex.onclick = () => {
+                        let prog = JSON.parse(localStorage.getItem('bible_v2_' + book.id)) || [];
+                        if (hex.classList.toggle('checked')) prog.push(num);
+                        else prog = prog.filter(n => n !== num);
+                        localStorage.setItem('bible_v2_' + book.id, JSON.stringify(prog));
+                        infoText.innerText = `${book.name} ${num} ГЛАВА`;
                     };
-                    rowDiv.appendChild(hex);
+                    row.appendChild(hex);
                 });
-                gridContainer.appendChild(rowDiv);
+                gridContainer.appendChild(row);
             }
         }
 
+        createMenuList();
         modeToggle.onchange = render;
         render();
     </script>
