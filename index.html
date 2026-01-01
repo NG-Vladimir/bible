@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Bible Tracker - Ultimate Honey</title>
+    <title>Bible Tracker - BIG GENESIS</title>
     <style>
         :root {
             --hex-w: 42px; 
@@ -30,14 +30,22 @@
         }
 
         header {
-            width: 100%; background: rgba(255, 255, 255, 0.8);
+            width: 100%; background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             position: sticky; top: 0; z-index: 1000;
-            padding: 16px 0; border-bottom: 0.5px solid rgba(0,0,0,0.05);
+            padding: 16px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1);
             text-align: center;
         }
 
-        .book-title { font-size: 20px; font-weight: 800; text-transform: lowercase; letter-spacing: -0.5px; margin-bottom: 8px; }
+        /* Заголовок БОЛЬШИМИ БУКВАМИ */
+        .book-title { 
+            font-size: 22px; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            margin-bottom: 8px; 
+            color: #000;
+        }
 
         .switch-container {
             display: flex; align-items: center; justify-content: center;
@@ -62,11 +70,22 @@
             background: #ffffff; margin: 20px 15px; padding: 40px 20px;
             border-radius: 35px; box-shadow: 0 10px 40px rgba(0,0,0,0.03);
             display: flex; flex-direction: column; align-items: center;
-            max-width: 95%; animation: slideUp 0.6s ease-out;
+            max-width: 95%;
         }
 
         .grid-wrapper { line-height: 0; display: inline-block; margin-right: calc(var(--hex-w) / 4); }
-        .hex-row { white-space: nowrap; margin-top: calc(var(--hex-h) * -0.26); display: block; }
+        
+        .hex-row { 
+            white-space: nowrap; 
+            margin-top: calc(var(--hex-h) * -0.26); 
+            display: block;
+            animation: rowFadeIn 0.5s ease backwards;
+        }
+        @keyframes rowFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .hex-row:first-child { margin-top: 0; }
         .hex-row:nth-child(even) { margin-left: calc(var(--hex-w) / 2 + var(--hex-gap) + 1px); }
 
@@ -75,10 +94,10 @@
             display: inline-block; margin: var(--hex-gap);
             position: relative; background: var(--hex-border);
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .hexagon:active { transform: scale(0.8); }
+        .hexagon:active { transform: scale(0.85); }
 
         .hexagon-inner {
             position: absolute; top: 1.5px; left: 1.5px; right: 1.5px; bottom: 1.5px;
@@ -90,7 +109,13 @@
 
         .checked .hexagon-inner {
             background: var(--gold-gradient); color: #ffffff;
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+            animation: honeyPulse 3s infinite ease-in-out;
+        }
+
+        @keyframes honeyPulse {
+            0% { filter: brightness(1); }
+            50% { filter: brightness(1.15); box-shadow: 0 0 15px rgba(255, 204, 0, 0.5); }
+            100% { filter: brightness(1); }
         }
 
         .info-panel {
@@ -103,19 +128,16 @@
 
         .info-text { font-size: 11px; font-weight: 700; color: #8e8e93; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
 
-        .scripture-quote { margin: 30px 25px 50px; text-align: center; max-width: 300px; animation: fadeIn 1.2s ease-in-out; }
+        .scripture-quote { margin: 30px 25px 50px; text-align: center; max-width: 300px; }
         .quote-text { font-size: 16px; line-height: 1.5; font-weight: 300; color: #3a3a3c; letter-spacing: 0.5px; margin-bottom: 10px; }
         .quote-text span { color: #ff9500; font-weight: 600; }
         .quote-ref { font-size: 10px; font-weight: 800; color: #c7c7cc; text-transform: uppercase; letter-spacing: 2px; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="book-title">бытие</div>
+        <div class="book-title">БЫТИЕ</div>
         <div class="switch-container">
             <span>по порядку</span>
             <label class="switch">
@@ -145,10 +167,9 @@
         const infoText = document.getElementById('info-text');
         const totalChapters = 50;
         const perRow = 7;
-        const progressKey = 'bible_genesis_vFinal';
-        const modeKey = 'bible_mode_mix';
+        const progressKey = 'bible_genesis_vFinal_BIG';
+        const modeKey = 'bible_mode_mix_BIG';
 
-        // Инициализация режима из памяти
         modeToggle.checked = localStorage.getItem(modeKey) === 'true';
 
         function getSaved() { return JSON.parse(localStorage.getItem(progressKey)) || []; }
@@ -156,7 +177,7 @@
         function updateInfo(num) {
             infoText.style.opacity = '0';
             setTimeout(() => {
-                infoText.innerText = `Бытие ${num} глава`;
+                infoText.innerText = `БЫТИЕ ${num} ГЛАВА`;
                 infoText.style.opacity = '1';
             }, 150);
         }
@@ -166,12 +187,10 @@
             const saved = getSaved();
             let chapters = Array.from({length: totalChapters}, (_, i) => i + 1);
 
-            // Сохраняем состояние переключателя
             localStorage.setItem(modeKey, modeToggle.checked);
 
             if (modeToggle.checked) {
-                // Используем фиксированный рандом, чтобы при обновлении страницы соты не прыгали
-                let seed = 123; 
+                let seed = 777; 
                 chapters.sort(() => {
                     seed = (seed * 9301 + 49297) % 233280;
                     return (seed / 233280) - 0.5;
@@ -181,6 +200,8 @@
             for (let i = 0; i < chapters.length; i += perRow) {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = 'hex-row';
+                rowDiv.style.animationDelay = (i / perRow) * 0.05 + 's';
+                
                 chapters.slice(i, i + perRow).forEach(num => {
                     const hex = document.createElement('div');
                     hex.className = 'hexagon' + (saved.includes(num) ? ' checked' : '');
