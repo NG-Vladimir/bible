@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>BIBLE TRACKER - OLD TESTAMENT</title>
+    <title>BIBLE TRACKER PRO</title>
     <style>
         :root {
             --hex-w: 42px; 
@@ -23,17 +23,16 @@
             display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #1c1c1e; overflow-x: hidden;
         }
 
-        /* Шапка с меню */
         header {
             width: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             position: sticky; top: 0; z-index: 1000; padding: 12px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1);
         }
 
-        .nav-header { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; max-width: 500px; margin: 0 auto; }
+        .nav-header { display: flex; align-items: center; justify-content: space-between; padding: 0 15px; max-width: 600px; margin: 0 auto; }
         
-        .menu-btn { background: none; border: none; font-size: 10px; font-weight: 800; color: #8e8e93; letter-spacing: 1.5px; cursor: pointer; text-transform: uppercase; }
+        .menu-btn { background: none; border: none; font-size: 10px; font-weight: 800; color: #8e8e93; letter-spacing: 1.2px; cursor: pointer; text-transform: uppercase; padding: 10px 5px; }
         
-        .book-title { font-size: 19px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: #000; text-align: center; flex-grow: 1; }
+        .book-title { font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #000; text-align: center; flex-grow: 1; }
 
         .switch-container {
             display: flex; align-items: center; justify-content: center;
@@ -48,28 +47,27 @@
         input:checked + .slider { background-color: var(--hex-active); }
         input:checked + .slider:before { transform: translateX(16px); }
 
-        /* Меню (Overlay) */
+        /* Меню Overlay */
         .menu-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            z-index: 2000; display: none; flex-direction: column; padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            z-index: 2000; display: none; flex-direction: column; padding: 50px 20px;
             overflow-y: auto;
         }
 
-        .menu-header { display: flex; justify-content: flex-end; margin-bottom: 20px; }
-        .close-btn { background: none; border: none; font-size: 24px; color: #8e8e93; font-weight: 300; }
+        .menu-title { font-size: 14px; font-weight: 800; text-align: center; color: #8e8e93; letter-spacing: 2px; margin-bottom: 25px; text-transform: uppercase; }
+        .close-btn { position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; color: #d1d1d6; }
 
-        .menu-list { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .menu-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .menu-item {
-            padding: 15px; border-radius: 15px; background: #f2f2f7; text-align: center;
-            font-size: 11px; font-weight: 700; color: #3a3a3c; text-transform: uppercase; letter-spacing: 1px;
-            transition: 0.2s;
+            padding: 14px 10px; border-radius: 14px; background: #f2f2f7; text-align: center;
+            font-size: 10px; font-weight: 700; color: #3a3a3c; text-transform: uppercase; letter-spacing: 0.5px;
         }
         .menu-item:active { background: var(--hex-active); color: white; }
 
-        /* Контейнер приложения */
+        /* Сетка сот */
         .app-container {
-            background: #ffffff; margin: 20px 15px; padding: 40px 20px;
+            background: #ffffff; margin: 20px 15px; padding: 40px 15px;
             border-radius: 35px; box-shadow: 0 10px 40px rgba(0,0,0,0.03);
             display: flex; flex-direction: column; align-items: center; max-width: 95%;
         }
@@ -94,8 +92,7 @@
             font-size: 13px; font-weight: 700; color: #3a3a3c; transition: all 0.4s ease;
         }
 
-        .checked .hexagon-inner { background: var(--gold-gradient); color: #ffffff; animation: honeyPulse 3s infinite ease-in-out; }
-        @keyframes honeyPulse { 0% { filter: brightness(1); } 50% { filter: brightness(1.1); } 100% { filter: brightness(1); } }
+        .checked .hexagon-inner { background: var(--gold-gradient); color: #ffffff; }
 
         .info-panel {
             margin-top: 15px; padding: 12px 25px; background: rgba(255, 255, 255, 0.5);
@@ -112,18 +109,24 @@
 </head>
 <body>
 
-    <div class="menu-overlay" id="menu">
-        <div class="menu-header">
-            <button class="close-btn" onclick="toggleMenu()">✕</button>
-        </div>
-        <div class="menu-list" id="menu-list"></div>
+    <div class="menu-overlay" id="old-menu">
+        <button class="close-btn" onclick="toggleMenu('old-menu')">✕</button>
+        <div class="menu-title">ВЕТХИЙ ЗАВЕТ</div>
+        <div class="menu-list" id="old-list"></div>
+    </div>
+
+    <div class="menu-overlay" id="new-menu">
+        <button class="close-btn" onclick="toggleMenu('new-menu')">✕</button>
+        <div class="menu-title">НОВЫЙ ЗАВЕТ</div>
+        <div class="menu-list" id="new-list"></div>
     </div>
 
     <header>
         <div class="nav-header">
-            <button class="menu-btn" onclick="toggleMenu()">список</button>
+            <button class="menu-btn" onclick="toggleMenu('old-menu')">ветхий</button>
             <div class="book-title" id="book-name">БЫТИЕ</div>
-            <div style="width: 50px;"></div> </div>
+            <button class="menu-btn" onclick="toggleMenu('new-menu')">новый</button>
+        </div>
         <div class="switch-container">
             <span>по порядку</span>
             <label class="switch">
@@ -148,14 +151,12 @@
     </div>
 
     <script>
-        const gridContainer = document.getElementById('grid');
-        const menuList = document.getElementById('menu-list');
-        const menuOverlay = document.getElementById('menu');
+        const grid = document.getElementById('grid');
         const modeToggle = document.getElementById('mode-toggle');
         const infoText = document.getElementById('info-text');
         const bookTitle = document.getElementById('book-name');
 
-        const bibleBooks = [
+        const oldTestament = [
             { name: 'БЫТИЕ', chapters: 50, id: 'gen' }, { name: 'ИСХОД', chapters: 40, id: 'exo' },
             { name: 'ЛЕВИТ', chapters: 27, id: 'lev' }, { name: 'ЧИСЛА', chapters: 36, id: 'num' },
             { name: 'ВТОРОЗАКОНИЕ', chapters: 34, id: 'deu' }, { name: 'ИИСУС НАВИН', chapters: 24, id: 'jos' },
@@ -178,64 +179,85 @@
             { name: 'МАЛАХИЯ', chapters: 4, id: 'mal' }
         ];
 
-        let currentIdx = localStorage.getItem('last_book_v2') ? parseInt(localStorage.getItem('last_book_v2')) : 0;
+        const newTestament = [
+            { name: 'МАТФЕЯ', chapters: 28, id: 'mat' }, { name: 'МАРКА', chapters: 16, id: 'mrk' },
+            { name: 'ЛУКИ', chapters: 24, id: 'luk' }, { name: 'ИОАННА', chapters: 21, id: 'jhn' },
+            { name: 'ДЕЯНИЯ', chapters: 28, id: 'act' }, { name: 'РИМЛЯНАМ', chapters: 16, id: 'rom' },
+            { name: '1 КОРИНФЯНАМ', chapters: 16, id: '1co' }, { name: '2 КОРИНФЯНАМ', chapters: 13, id: '2co' },
+            { name: 'ГАЛАТАМ', chapters: 6, id: 'gal' }, { name: 'ЕФЕСЯНАМ', chapters: 6, id: 'eph' },
+            { name: 'ФИЛИППИЙЦАМ', chapters: 4, id: 'php' }, { name: 'КОЛОССЯНАМ', chapters: 4, id: 'col' },
+            { name: '1 ФЕССАЛОНИКИЙЦАМ', chapters: 5, id: '1th' }, { name: '2 ФЕССАЛОНИКИЙЦАМ', chapters: 3, id: '2th' },
+            { name: '1 ТИМОФЕЮ', chapters: 6, id: '1ti' }, { name: '2 ТИМОФЕЮ', chapters: 4, id: '2ti' },
+            { name: 'ТИТУ', chapters: 3, id: 'tit' }, { name: 'ФИЛИМОНУ', chapters: 1, id: 'phm' },
+            { name: 'ЕВРЕЯМ', chapters: 13, id: 'heb' }, { name: 'ИАКОВА', chapters: 5, id: 'jas' },
+            { name: '1 ПЕТРА', chapters: 5, id: '1pe' }, { name: '2 ПЕТРА', chapters: 3, id: '2pe' },
+            { name: '1 ИОАННА', chapters: 5, id: '1jn' }, { name: '2 ИОАННА', chapters: 1, id: '2jn' },
+            { name: '3 ИОАННА', chapters: 1, id: '3jn' }, { name: 'ИУДЫ', chapters: 1, id: 'jud' },
+            { name: 'ОТКРОВЕНИЕ', chapters: 22, id: 'rev' }
+        ];
+
+        let currentBook = JSON.parse(localStorage.getItem('last_book_obj')) || oldTestament[0];
         
-        function toggleMenu() {
-            const isVisible = menuOverlay.style.display === 'flex';
-            menuOverlay.style.display = isVisible ? 'none' : 'flex';
+        // ПАМЯТЬ ПЕРЕКЛЮЧАТЕЛЯ
+        modeToggle.checked = localStorage.getItem('mode_mix') === 'true';
+
+        function toggleMenu(id) {
+            const m = document.getElementById(id);
+            m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
         }
 
-        function selectBook(idx) {
-            currentIdx = idx;
-            localStorage.setItem('last_book_v2', idx);
-            toggleMenu();
+        function selectBook(book, menuId) {
+            currentBook = book;
+            localStorage.setItem('last_book_obj', JSON.stringify(book));
+            toggleMenu(menuId);
             render();
         }
 
-        function createMenuList() {
-            bibleBooks.forEach((book, idx) => {
-                const item = document.createElement('div');
-                item.className = 'menu-item';
-                item.innerText = book.name;
-                item.onclick = () => selectBook(idx);
-                menuList.appendChild(item);
+        function buildMenus() {
+            const oList = document.getElementById('old-list');
+            const nList = document.getElementById('new-list');
+            oldTestament.forEach(b => {
+                const d = document.createElement('div'); d.className = 'menu-item'; d.innerText = b.name;
+                d.onclick = () => selectBook(b, 'old-menu'); oList.appendChild(d);
+            });
+            newTestament.forEach(b => {
+                const d = document.createElement('div'); d.className = 'menu-item'; d.innerText = b.name;
+                d.onclick = () => selectBook(b, 'new-menu'); nList.appendChild(d);
             });
         }
 
         function render() {
-            const book = bibleBooks[currentIdx];
-            bookTitle.innerText = book.name;
-            gridContainer.innerHTML = '';
-            const saved = JSON.parse(localStorage.getItem('bible_v2_' + book.id)) || [];
-            let chapters = Array.from({length: book.chapters}, (_, i) => i + 1);
+            bookTitle.innerText = currentBook.name;
+            grid.innerHTML = '';
+            const saved = JSON.parse(localStorage.getItem('bible_v3_' + currentBook.id)) || [];
+            let chapters = Array.from({length: currentBook.chapters}, (_, i) => i + 1);
+
+            // СОХРАНЯЕМ СОСТОЯНИЕ РАНДОМА
+            localStorage.setItem('mode_mix', modeToggle.checked);
 
             if (modeToggle.checked) {
-                let seed = currentIdx + 99;
-                chapters.sort(() => { seed = (seed * 9301 + 49297) % 233280; return (seed / 233280) - 0.5; });
+                let s = 123; // Фиксированный сид для каждой книги
+                chapters.sort(() => { s = (s * 9301 + 49297) % 233280; return (s / 233280) - 0.5; });
             }
 
             for (let i = 0; i < chapters.length; i += 7) {
-                const row = document.createElement('div');
-                row.className = 'hex-row';
-                row.style.animationDelay = (i / 7) * 0.04 + 's';
+                const row = document.createElement('div'); row.className = 'hex-row';
                 chapters.slice(i, i + 7).forEach(num => {
-                    const hex = document.createElement('div');
-                    hex.className = 'hexagon' + (saved.includes(num) ? ' checked' : '');
-                    hex.innerHTML = `<div class="hexagon-inner">${num}</div>`;
-                    hex.onclick = () => {
-                        let prog = JSON.parse(localStorage.getItem('bible_v2_' + book.id)) || [];
-                        if (hex.classList.toggle('checked')) prog.push(num);
-                        else prog = prog.filter(n => n !== num);
-                        localStorage.setItem('bible_v2_' + book.id, JSON.stringify(prog));
-                        infoText.innerText = `${book.name} ${num} ГЛАВА`;
+                    const h = document.createElement('div'); h.className = 'hexagon' + (saved.includes(num) ? ' checked' : '');
+                    h.innerHTML = `<div class="hexagon-inner">${num}</div>`;
+                    h.onclick = () => {
+                        let p = JSON.parse(localStorage.getItem('bible_v3_' + currentBook.id)) || [];
+                        if (h.classList.toggle('checked')) p.push(num); else p = p.filter(x => x !== num);
+                        localStorage.setItem('bible_v3_' + currentBook.id, JSON.stringify(p));
+                        infoText.innerText = `${currentBook.name} ${num} ГЛАВА`;
                     };
-                    row.appendChild(hex);
+                    row.appendChild(h);
                 });
-                gridContainer.appendChild(row);
+                grid.appendChild(row);
             }
         }
 
-        createMenuList();
+        buildMenus();
         modeToggle.onchange = render;
         render();
     </script>
