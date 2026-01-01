@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Bible Tracker - BIG GENESIS</title>
+    <title>Bible Tracker - Genesis & Exodus</title>
     <style>
         :root {
             --hex-w: 42px; 
@@ -15,37 +15,29 @@
             --gold-gradient: linear-gradient(145deg, #ffcc00, #ff9500);
         }
 
-        * {
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            box-sizing: border-box;
-        }
+        * { -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; box-sizing: border-box; }
 
         body {
             background: linear-gradient(180deg, #ffffff 0%, var(--bg-page) 100%);
-            margin: 0; padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; color: #1c1c1e;
+            margin: 0; padding: 0; font-family: -apple-system, system-ui, sans-serif;
+            display: flex; flex-direction: column; align-items: center; min-height: 100vh; color: #1c1c1e;
         }
 
         header {
-            width: 100%; background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            position: sticky; top: 0; z-index: 1000;
-            padding: 16px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1);
+            width: 100%; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 1000; padding: 16px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1);
             text-align: center;
         }
 
-        /* Заголовок БОЛЬШИМИ БУКВАМИ */
-        .book-title { 
-            font-size: 22px; 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            letter-spacing: 2px; 
-            margin-bottom: 8px; 
-            color: #000;
+        .nav-container { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 8px; }
+        
+        .nav-btn {
+            background: none; border: none; font-size: 24px; color: #d1d1d6; cursor: pointer;
+            padding: 0 10px; transition: color 0.3s;
         }
+        .nav-btn:active { color: var(--hex-active); }
+
+        .book-title { font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; color: #000; }
 
         .switch-container {
             display: flex; align-items: center; justify-content: center;
@@ -53,83 +45,52 @@
             text-transform: uppercase; letter-spacing: 0.8px;
         }
 
-        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        .switch { position: relative; width: 40px; height: 22px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-        .slider {
-            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #d1d1d6; transition: .4s; border-radius: 34px;
-        }
-        .slider:before {
-            position: absolute; content: ""; height: 18px; width: 18px; left: 2px; bottom: 2px;
-            background-color: white; transition: .4s; border-radius: 50%;
-        }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #d1d1d6; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
         input:checked + .slider { background-color: var(--hex-active); }
         input:checked + .slider:before { transform: translateX(18px); }
 
         .app-container {
             background: #ffffff; margin: 20px 15px; padding: 40px 20px;
             border-radius: 35px; box-shadow: 0 10px 40px rgba(0,0,0,0.03);
-            display: flex; flex-direction: column; align-items: center;
-            max-width: 95%;
+            display: flex; flex-direction: column; align-items: center; max-width: 95%;
         }
 
         .grid-wrapper { line-height: 0; display: inline-block; margin-right: calc(var(--hex-w) / 4); }
-        
-        .hex-row { 
-            white-space: nowrap; 
-            margin-top: calc(var(--hex-h) * -0.26); 
-            display: block;
-            animation: rowFadeIn 0.5s ease backwards;
-        }
-        @keyframes rowFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        .hex-row { white-space: nowrap; margin-top: calc(var(--hex-h) * -0.26); display: block; animation: rowFadeIn 0.5s ease backwards; }
+        @keyframes rowFadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .hex-row:first-child { margin-top: 0; }
         .hex-row:nth-child(even) { margin-left: calc(var(--hex-w) / 2 + var(--hex-gap) + 1px); }
 
         .hexagon {
-            width: var(--hex-w); height: var(--hex-h);
-            display: inline-block; margin: var(--hex-gap);
+            width: var(--hex-w); height: var(--hex-h); display: inline-block; margin: var(--hex-gap);
             position: relative; background: var(--hex-border);
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         .hexagon:active { transform: scale(0.85); }
 
         .hexagon-inner {
             position: absolute; top: 1.5px; left: 1.5px; right: 1.5px; bottom: 1.5px;
-            background: #ffffff; clip-path: inherit;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 13px; font-weight: 700; color: #3a3a3c;
-            transition: all 0.4s ease;
+            background: #ffffff; clip-path: inherit; display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; color: #3a3a3c; transition: all 0.4s ease;
         }
 
-        .checked .hexagon-inner {
-            background: var(--gold-gradient); color: #ffffff;
-            animation: honeyPulse 3s infinite ease-in-out;
-        }
+        .checked .hexagon-inner { background: var(--gold-gradient); color: #ffffff; animation: honeyPulse 3s infinite ease-in-out; }
 
-        @keyframes honeyPulse {
-            0% { filter: brightness(1); }
-            50% { filter: brightness(1.15); box-shadow: 0 0 15px rgba(255, 204, 0, 0.5); }
-            100% { filter: brightness(1); }
-        }
+        @keyframes honeyPulse { 0% { filter: brightness(1); } 50% { filter: brightness(1.15); } 100% { filter: brightness(1); } }
 
         .info-panel {
-            margin-top: 15px; padding: 12px 25px;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border-radius: 18px; border: 0.5px solid rgba(255, 255, 255, 0.5);
+            margin-top: 15px; padding: 12px 25px; background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px); border-radius: 18px; border: 0.5px solid rgba(255, 255, 255, 0.5);
             text-align: center; min-width: 160px;
         }
-
         .info-text { font-size: 11px; font-weight: 700; color: #8e8e93; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
 
         .scripture-quote { margin: 30px 25px 50px; text-align: center; max-width: 300px; }
-        .quote-text { font-size: 16px; line-height: 1.5; font-weight: 300; color: #3a3a3c; letter-spacing: 0.5px; margin-bottom: 10px; }
+        .quote-text { font-size: 16px; line-height: 1.5; font-weight: 300; color: #3a3a3c; }
         .quote-text span { color: #ff9500; font-weight: 600; }
         .quote-ref { font-size: 10px; font-weight: 800; color: #c7c7cc; text-transform: uppercase; letter-spacing: 2px; }
     </style>
@@ -137,7 +98,11 @@
 <body>
 
     <header>
-        <div class="book-title">БЫТИЕ</div>
+        <div class="nav-container">
+            <button class="nav-btn" onclick="changeBook(-1)">‹</button>
+            <div class="book-title" id="book-name">БЫТИЕ</div>
+            <button class="nav-btn" onclick="changeBook(1)">›</button>
+        </div>
         <div class="switch-container">
             <span>по порядку</span>
             <label class="switch">
@@ -165,38 +130,53 @@
         const gridContainer = document.getElementById('grid');
         const modeToggle = document.getElementById('mode-toggle');
         const infoText = document.getElementById('info-text');
-        const totalChapters = 50;
-        const perRow = 7;
-        const progressKey = 'bible_genesis_vFinal_BIG';
-        const modeKey = 'bible_mode_mix_BIG';
+        const bookTitle = document.getElementById('book-name');
+
+        const books = [
+            { name: 'БЫТИЕ', chapters: 50, key: 'genesis' },
+            { name: 'ИСХОД', chapters: 40, key: 'exodus' }
+        ];
+
+        let currentBookIndex = localStorage.getItem('current_book_idx') ? parseInt(localStorage.getItem('current_book_idx')) : 0;
+        const modeKey = 'bible_mode_mix_vNavigation';
 
         modeToggle.checked = localStorage.getItem(modeKey) === 'true';
 
-        function getSaved() { return JSON.parse(localStorage.getItem(progressKey)) || []; }
+        function changeBook(direction) {
+            currentBookIndex = (currentBookIndex + direction + books.length) % books.length;
+            localStorage.setItem('current_book_idx', currentBookIndex);
+            render();
+        }
 
-        function updateInfo(num) {
+        function getSaved(key) { return JSON.parse(localStorage.getItem('bible_progress_' + key)) || []; }
+
+        function updateInfo(bookName, num) {
             infoText.style.opacity = '0';
             setTimeout(() => {
-                infoText.innerText = `БЫТИЕ ${num} ГЛАВА`;
+                infoText.innerText = `${bookName} ${num} ГЛАВА`;
                 infoText.style.opacity = '1';
             }, 150);
         }
 
         function render() {
+            const currentBook = books[currentBookIndex];
+            bookTitle.innerText = currentBook.name;
             gridContainer.innerHTML = '';
-            const saved = getSaved();
-            let chapters = Array.from({length: totalChapters}, (_, i) => i + 1);
+            
+            const saved = getSaved(currentBook.key);
+            let chapters = Array.from({length: currentBook.chapters}, (_, i) => i + 1);
 
             localStorage.setItem(modeKey, modeToggle.checked);
 
             if (modeToggle.checked) {
-                let seed = 777; 
+                let seed = currentBookIndex + 777; 
                 chapters.sort(() => {
                     seed = (seed * 9301 + 49297) % 233280;
                     return (seed / 233280) - 0.5;
                 });
             }
 
+            const perRow = 7;
             for (let i = 0; i < chapters.length; i += perRow) {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = 'hex-row';
@@ -207,7 +187,7 @@
                     hex.className = 'hexagon' + (saved.includes(num) ? ' checked' : '');
                     hex.innerHTML = `<div class="hexagon-inner">${num}</div>`;
                     hex.onclick = function() {
-                        let currentProgress = getSaved();
+                        let currentProgress = getSaved(currentBook.key);
                         if (this.classList.contains('checked')) {
                             this.classList.remove('checked');
                             currentProgress = currentProgress.filter(n => n !== num);
@@ -216,8 +196,8 @@
                             if (!currentProgress.includes(num)) currentProgress.push(num);
                             if (window.navigator.vibrate) window.navigator.vibrate(10);
                         }
-                        localStorage.setItem(progressKey, JSON.stringify(currentProgress));
-                        updateInfo(num);
+                        localStorage.setItem('bible_progress_' + currentBook.key, JSON.stringify(currentProgress));
+                        updateInfo(currentBook.name, num);
                     };
                     rowDiv.appendChild(hex);
                 });
