@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Bible Tracker - Honey Edition</title>
+    <title>Bible Tracker - Ultimate Honey</title>
     <style>
         :root {
             --hex-w: 42px; 
@@ -23,32 +23,21 @@
 
         body {
             background: linear-gradient(180deg, #ffffff 0%, var(--bg-page) 100%);
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-            color: #1c1c1e;
+            display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh; color: #1c1c1e;
         }
 
         header {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0; z-index: 1000;
-            padding: 16px 0;
-            border-bottom: 0.5px solid rgba(0,0,0,0.05);
+            width: 100%; background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            position: sticky; top: 0; z-index: 1000;
+            padding: 16px 0; border-bottom: 0.5px solid rgba(0,0,0,0.05);
             text-align: center;
         }
 
-        .book-title {
-            font-size: 20px; font-weight: 800; text-transform: lowercase;
-            letter-spacing: -0.5px; margin-bottom: 8px;
-        }
+        .book-title { font-size: 20px; font-weight: 800; text-transform: lowercase; letter-spacing: -0.5px; margin-bottom: 8px; }
 
         .switch-container {
             display: flex; align-items: center; justify-content: center;
@@ -70,28 +59,14 @@
         input:checked + .slider:before { transform: translateX(18px); }
 
         .app-container {
-            background: #ffffff;
-            margin: 20px 15px;
-            padding: 40px 20px;
-            border-radius: 35px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            background: #ffffff; margin: 20px 15px; padding: 40px 20px;
+            border-radius: 35px; box-shadow: 0 10px 40px rgba(0,0,0,0.03);
             display: flex; flex-direction: column; align-items: center;
-            max-width: 95%;
-            animation: slideUp 0.6s ease-out;
+            max-width: 95%; animation: slideUp 0.6s ease-out;
         }
 
-        .grid-wrapper {
-            line-height: 0;
-            display: inline-block;
-            margin-right: calc(var(--hex-w) / 4);
-        }
-
-        .hex-row {
-            white-space: nowrap;
-            margin-top: calc(var(--hex-h) * -0.26);
-            display: block;
-        }
-
+        .grid-wrapper { line-height: 0; display: inline-block; margin-right: calc(var(--hex-w) / 4); }
+        .hex-row { white-space: nowrap; margin-top: calc(var(--hex-h) * -0.26); display: block; }
         .hex-row:first-child { margin-top: 0; }
         .hex-row:nth-child(even) { margin-left: calc(var(--hex-w) / 2 + var(--hex-gap) + 1px); }
 
@@ -114,12 +89,10 @@
         }
 
         .checked .hexagon-inner {
-            background: var(--gold-gradient);
-            color: #ffffff;
+            background: var(--gold-gradient); color: #ffffff;
             box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
         }
 
-        /* Инфо-панель */
         .info-panel {
             margin-top: 15px; padding: 12px 25px;
             background: rgba(255, 255, 255, 0.5);
@@ -128,41 +101,12 @@
             text-align: center; min-width: 160px;
         }
 
-        .info-text {
-            font-size: 11px; font-weight: 700; color: #8e8e93;
-            text-transform: uppercase; letter-spacing: 1px;
-            transition: all 0.3s ease;
-        }
+        .info-text { font-size: 11px; font-weight: 700; color: #8e8e93; text-transform: uppercase; letter-spacing: 1px; transition: all 0.3s ease; }
 
-        /* Цитата про МЕД */
-        .scripture-quote {
-            margin: 30px 25px 50px;
-            text-align: center;
-            max-width: 300px;
-            animation: fadeIn 1.2s ease-in-out;
-        }
-
-        .quote-text {
-            font-size: 16px;
-            line-height: 1.5;
-            font-weight: 300;
-            color: #3a3a3c;
-            letter-spacing: 0.5px;
-            margin-bottom: 10px;
-        }
-
-        .quote-text span {
-            color: #ff9500;
-            font-weight: 600;
-        }
-
-        .quote-ref {
-            font-size: 10px;
-            font-weight: 800;
-            color: #c7c7cc;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        .scripture-quote { margin: 30px 25px 50px; text-align: center; max-width: 300px; animation: fadeIn 1.2s ease-in-out; }
+        .quote-text { font-size: 16px; line-height: 1.5; font-weight: 300; color: #3a3a3c; letter-spacing: 0.5px; margin-bottom: 10px; }
+        .quote-text span { color: #ff9500; font-weight: 600; }
+        .quote-ref { font-size: 10px; font-weight: 800; color: #c7c7cc; text-transform: uppercase; letter-spacing: 2px; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -171,7 +115,7 @@
 <body>
 
     <header>
-        <div class="book-title">Бытие</div>
+        <div class="book-title">бытие</div>
         <div class="switch-container">
             <span>по порядку</span>
             <label class="switch">
@@ -191,9 +135,7 @@
     </div>
 
     <div class="scripture-quote">
-        <div class="quote-text">
-            «Как сладки гортани моей слова Твои! лучше <span>меда</span> устам моим»
-        </div>
+        <div class="quote-text">«Как сладки гортани моей слова Твои! лучше <span>меда</span> устам моим»</div>
         <div class="quote-ref">Псалом 118:103</div>
     </div>
 
@@ -203,9 +145,13 @@
         const infoText = document.getElementById('info-text');
         const totalChapters = 50;
         const perRow = 7;
-        const storageKey = 'bible_genesis_final_v4';
+        const progressKey = 'bible_genesis_vFinal';
+        const modeKey = 'bible_mode_mix';
 
-        function getSaved() { return JSON.parse(localStorage.getItem(storageKey)) || []; }
+        // Инициализация режима из памяти
+        modeToggle.checked = localStorage.getItem(modeKey) === 'true';
+
+        function getSaved() { return JSON.parse(localStorage.getItem(progressKey)) || []; }
 
         function updateInfo(num) {
             infoText.style.opacity = '0';
@@ -220,19 +166,25 @@
             const saved = getSaved();
             let chapters = Array.from({length: totalChapters}, (_, i) => i + 1);
 
+            // Сохраняем состояние переключателя
+            localStorage.setItem(modeKey, modeToggle.checked);
+
             if (modeToggle.checked) {
-                chapters.sort(() => Math.random() - 0.5);
+                // Используем фиксированный рандом, чтобы при обновлении страницы соты не прыгали
+                let seed = 123; 
+                chapters.sort(() => {
+                    seed = (seed * 9301 + 49297) % 233280;
+                    return (seed / 233280) - 0.5;
+                });
             }
 
             for (let i = 0; i < chapters.length; i += perRow) {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = 'hex-row';
-                
                 chapters.slice(i, i + perRow).forEach(num => {
                     const hex = document.createElement('div');
                     hex.className = 'hexagon' + (saved.includes(num) ? ' checked' : '');
                     hex.innerHTML = `<div class="hexagon-inner">${num}</div>`;
-                    
                     hex.onclick = function() {
                         let currentProgress = getSaved();
                         if (this.classList.contains('checked')) {
@@ -243,7 +195,7 @@
                             if (!currentProgress.includes(num)) currentProgress.push(num);
                             if (window.navigator.vibrate) window.navigator.vibrate(10);
                         }
-                        localStorage.setItem(storageKey, JSON.stringify(currentProgress));
+                        localStorage.setItem(progressKey, JSON.stringify(currentProgress));
                         updateInfo(num);
                     };
                     rowDiv.appendChild(hex);
