@@ -3,26 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Bible Tracker - Gold Honey Edition</title>
+    <title>Bible Tracker - Honey Edition</title>
     <style>
         :root {
-            /* Оптимальный размер сот для мобильных экранов */
             --hex-w: 42px; 
             --hex-h: calc(var(--hex-w) * 1.1547);
             --hex-gap: 3px;
             --hex-active: #ffcc00;
             --hex-border: #e5e5ea;
+            --bg-page: #f2f2f7;
+            --gold-gradient: linear-gradient(145deg, #ffcc00, #ff9500);
         }
 
-        /* ИСПРАВЛЕНИЕ БАГА: Убираем "квадратик" при нажатии в мобильных браузерах */
         * {
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
-            outline: none;
+            box-sizing: border-box;
         }
 
         body {
-            background-color: #f2f2f7;
+            background: linear-gradient(180deg, #ffffff 0%, var(--bg-page) 100%);
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -30,162 +30,148 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
+            color: #1c1c1e;
         }
 
         header {
             width: 100%;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             position: sticky;
-            top: 0;
-            z-index: 1000;
+            top: 0; z-index: 1000;
             padding: 16px 0;
-            border-bottom: 0.5px solid rgba(0,0,0,0.1);
+            border-bottom: 0.5px solid rgba(0,0,0,0.05);
             text-align: center;
         }
 
         .book-title {
-            font-size: 20px;
-            font-weight: 800;
-            color: #1c1c1e;
-            letter-spacing: -0.5px;
-            margin-bottom: 8px;
-            text-transform: lowercase;
+            font-size: 20px; font-weight: 800; text-transform: lowercase;
+            letter-spacing: -0.5px; margin-bottom: 8px;
         }
 
-        /* Тумблер переключения режима */
         .switch-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #8e8e93;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; font-size: 10px; font-weight: 700; color: #8e8e93;
+            text-transform: uppercase; letter-spacing: 0.8px;
         }
 
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 42px;
-            height: 24px;
-        }
-
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
         .switch input { opacity: 0; width: 0; height: 0; }
-
         .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #d1d1d6;
-            transition: .4s;
-            border-radius: 34px;
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #d1d1d6; transition: .4s; border-radius: 34px;
         }
-
         .slider:before {
-            position: absolute;
-            content: "";
-            height: 20px;
-            width: 20px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: absolute; content: ""; height: 18px; width: 18px; left: 2px; bottom: 2px;
+            background-color: white; transition: .4s; border-radius: 50%;
         }
-
         input:checked + .slider { background-color: var(--hex-active); }
         input:checked + .slider:before { transform: translateX(18px); }
 
-        /* Карточка с сотами */
         .app-container {
             background: #ffffff;
-            margin: 25px 15px;
-            padding: 40px 25px; /* Просторные отступы по бокам */
-            border-radius: 32px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 90%;
+            margin: 20px 15px;
+            padding: 40px 20px;
+            border-radius: 35px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            display: flex; flex-direction: column; align-items: center;
+            max-width: 95%;
+            animation: slideUp 0.6s ease-out;
         }
 
         .grid-wrapper {
             line-height: 0;
             display: inline-block;
-            /* Центровка с учетом горизонтального сдвига */
             margin-right: calc(var(--hex-w) / 4);
         }
 
         .hex-row {
             white-space: nowrap;
-            margin-top: calc(var(--hex-h) * -0.26); /* Стык сот */
+            margin-top: calc(var(--hex-h) * -0.26);
             display: block;
         }
 
         .hex-row:first-child { margin-top: 0; }
-
-        .hex-row:nth-child(even) {
-            margin-left: calc(var(--hex-w) / 2 + var(--hex-gap) + 1px);
-        }
+        .hex-row:nth-child(even) { margin-left: calc(var(--hex-w) / 2 + var(--hex-gap) + 1px); }
 
         .hexagon {
-            width: var(--hex-w);
-            height: var(--hex-h);
-            display: inline-block;
-            margin: var(--hex-gap);
-            position: relative;
-            background: var(--hex-border);
+            width: var(--hex-w); height: var(--hex-h);
+            display: inline-block; margin: var(--hex-gap);
+            position: relative; background: var(--hex-border);
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            /* Плавная пружинистая анимация */
-            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .hexagon:active {
-            transform: scale(0.85); /* Эффект нажатия */
-        }
+        .hexagon:active { transform: scale(0.8); }
 
         .hexagon-inner {
-            position: absolute;
-            top: 1.5px;
-            left: 1.5px;
-            right: 1.5px;
-            bottom: 1.5px;
-            background: #ffffff;
-            clip-path: inherit;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            font-weight: 700;
-            color: #3a3a3c;
-            /* Плавное закрашивание */
-            transition: background 0.4s ease, color 0.4s ease;
+            position: absolute; top: 1.5px; left: 1.5px; right: 1.5px; bottom: 1.5px;
+            background: #ffffff; clip-path: inherit;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 13px; font-weight: 700; color: #3a3a3c;
+            transition: all 0.4s ease;
         }
 
-        /* Стиль активной соты */
         .checked .hexagon-inner {
-            background: linear-gradient(145deg, #ffcc00, #ff9500);
+            background: var(--gold-gradient);
             color: #ffffff;
-            animation: hex-pop 0.3s ease-out;
+            box-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
         }
 
-        @keyframes hex-pop {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.15); }
-            100% { transform: scale(1); }
+        /* Инфо-панель */
+        .info-panel {
+            margin-top: 15px; padding: 12px 25px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border-radius: 18px; border: 0.5px solid rgba(255, 255, 255, 0.5);
+            text-align: center; min-width: 160px;
         }
+
+        .info-text {
+            font-size: 11px; font-weight: 700; color: #8e8e93;
+            text-transform: uppercase; letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        /* Цитата про МЕД */
+        .scripture-quote {
+            margin: 30px 25px 50px;
+            text-align: center;
+            max-width: 300px;
+            animation: fadeIn 1.2s ease-in-out;
+        }
+
+        .quote-text {
+            font-size: 16px;
+            line-height: 1.5;
+            font-weight: 300;
+            color: #3a3a3c;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+        }
+
+        .quote-text span {
+            color: #ff9500;
+            font-weight: 600;
+        }
+
+        .quote-ref {
+            font-size: 10px;
+            font-weight: 800;
+            color: #c7c7cc;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="book-title">бытие</div>
+        <div class="book-title">Бытие</div>
         <div class="switch-container">
             <span>по порядку</span>
             <label class="switch">
@@ -200,15 +186,33 @@
         <div class="grid-wrapper" id="grid"></div>
     </div>
 
+    <div class="info-panel">
+        <div class="info-text" id="info-text">выберите главу</div>
+    </div>
+
+    <div class="scripture-quote">
+        <div class="quote-text">
+            «Как сладки гортани моей слова Твои! лучше <span>меда</span> устам моим»
+        </div>
+        <div class="quote-ref">Псалом 118:103</div>
+    </div>
+
     <script>
         const gridContainer = document.getElementById('grid');
         const modeToggle = document.getElementById('mode-toggle');
+        const infoText = document.getElementById('info-text');
         const totalChapters = 50;
         const perRow = 7;
-        const storageKey = 'bible_progress_genesis_v2';
+        const storageKey = 'bible_genesis_final_v4';
 
-        function getSaved() {
-            return JSON.parse(localStorage.getItem(storageKey)) || [];
+        function getSaved() { return JSON.parse(localStorage.getItem(storageKey)) || []; }
+
+        function updateInfo(num) {
+            infoText.style.opacity = '0';
+            setTimeout(() => {
+                infoText.innerText = `Бытие ${num} глава`;
+                infoText.style.opacity = '1';
+            }, 150);
         }
 
         function render() {
@@ -237,10 +241,11 @@
                         } else {
                             this.classList.add('checked');
                             if (!currentProgress.includes(num)) currentProgress.push(num);
+                            if (window.navigator.vibrate) window.navigator.vibrate(10);
                         }
                         localStorage.setItem(storageKey, JSON.stringify(currentProgress));
+                        updateInfo(num);
                     };
-                    
                     rowDiv.appendChild(hex);
                 });
                 gridContainer.appendChild(rowDiv);
@@ -248,7 +253,7 @@
         }
 
         modeToggle.onchange = render;
-        render(); // Начальная отрисовка
+        render();
     </script>
 </body>
 </html>
