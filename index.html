@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>BIBLE TRACKER PRO</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="BibleTracker">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3004/3004416.png">
+    <meta name="theme-color" content="#ffffff">
+
     <style>
         :root {
             --hex-w: 42px; 
@@ -28,14 +36,13 @@
             position: sticky; top: 0; z-index: 1000; padding: 12px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1);
         }
 
-        .nav-header { display: flex; align-items: center; justify-content: space-between; padding: 0 15px; max-width: 600px; margin: 0 auto; }
-        
-        .total-progress {
-            font-size: 10px; font-weight: 800; color: #ff9500; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;
+        .total-stats {
+            text-align: center; font-size: 10px; font-weight: 800; color: #ff9500;
+            text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px;
         }
 
+        .nav-header { display: flex; align-items: center; justify-content: space-between; padding: 0 15px; max-width: 600px; margin: 0 auto; }
         .menu-btn { background: none; border: none; font-size: 10px; font-weight: 800; color: #8e8e93; letter-spacing: 1.2px; cursor: pointer; text-transform: uppercase; padding: 10px 5px; }
-        
         .book-title { font-size: 18px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #000; text-align: center; flex-grow: 1; }
 
         .switch-container {
@@ -67,13 +74,14 @@
             font-size: 10px; font-weight: 700; color: #3a3a3c; text-transform: uppercase; letter-spacing: 0.5px;
             display: flex; flex-direction: column; gap: 4px;
         }
-        .menu-item span.count { font-size: 8px; opacity: 0.5; }
+        .menu-item .count { font-size: 8px; opacity: 0.5; font-weight: 800; }
         .menu-item:active { background: var(--hex-active); color: white; }
 
         .app-container {
             background: #ffffff; margin: 20px 15px; padding: 40px 15px;
             border-radius: 35px; box-shadow: 0 10px 40px rgba(0,0,0,0.03);
             display: flex; flex-direction: column; align-items: center; max-width: 95%;
+            min-height: 300px;
         }
 
         .grid-wrapper { line-height: 0; display: inline-block; margin-right: calc(var(--hex-w) / 4); }
@@ -81,13 +89,22 @@
         .hex-row:first-child { margin-top: 0; }
         .hex-row:nth-child(even) { margin-left: calc(var(--hex-w) / 2 + var(--hex-gap) + 1px); }
 
+        @keyframes hexPop {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.08); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         .hexagon {
             width: var(--hex-w); height: var(--hex-h); display: inline-block; margin: var(--hex-gap);
             position: relative; background: var(--hex-border);
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-            transition: transform 0.2s ease;
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0; transform: scale(0);
         }
-        .hexagon:active { transform: scale(0.9); }
+        
+        .hexagon.animate { animation: hexPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .hexagon:active { transform: scale(0.8) !important; }
 
         .hexagon-inner {
             position: absolute; top: 1.5px; left: 1.5px; right: 1.5px; bottom: 1.5px;
@@ -100,13 +117,14 @@
         .info-panel {
             margin-top: 15px; padding: 12px 25px; background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(10px); border-radius: 18px; border: 0.5px solid rgba(255, 255, 255, 0.5);
-            text-align: center; min-width: 200px;
+            text-align: center; min-width: 220px;
         }
         .info-text { font-size: 11px; font-weight: 700; color: #8e8e93; text-transform: uppercase; letter-spacing: 1px; }
-
+        
         .reset-btn {
-            margin-top: 15px; background: none; border: none; color: #ff3b30; 
-            font-size: 9px; font-weight: 700; text-transform: uppercase; cursor: pointer; opacity: 0.6;
+            margin-top: 10px; background: none; border: none; color: #ff3b30; 
+            font-size: 9px; font-weight: 800; text-transform: uppercase; cursor: pointer; 
+            opacity: 0.5; padding: 5px;
         }
 
         .scripture-quote { margin: 30px 25px 50px; text-align: center; max-width: 300px; }
@@ -130,9 +148,7 @@
     </div>
 
     <header>
-        <div style="text-align: center;">
-            <div class="total-progress" id="total-stats">ЗАГРУЗКА: 0 / 1189</div>
-        </div>
+        <div class="total-stats" id="total-stats">ПРОГРЕСС: 0 / 1189</div>
         <div class="nav-header">
             <button class="menu-btn" onclick="toggleMenu('old-menu')">ветхий</button>
             <div class="book-title" id="book-name">БЫТИЕ</div>
@@ -154,7 +170,7 @@
 
     <div class="info-panel">
         <div class="info-text" id="info-text">выберите главу</div>
-        <button class="reset-btn" onclick="resetCurrentBook()">Сбросить прогресс книги</button>
+        <button class="reset-btn" onclick="resetBook()">Сбросить прогресс книги</button>
     </div>
 
     <div class="scripture-quote">
@@ -214,21 +230,20 @@
 
         function toggleMenu(id) {
             const m = document.getElementById(id);
-            if (m.style.display !== 'flex') {
-                updateMenuCounts(); // Обновляем цифры перед открытием
+            if(m.style.display !== 'flex') {
+                updateMenuProgress();
                 m.style.display = 'flex';
             } else {
                 m.style.display = 'none';
             }
         }
 
-        function updateMenuCounts() {
-            // Отрисовка заново не нужна, просто меняем текст счетчиков
-            const allBooks = [...oldTestament, ...newTestament];
-            allBooks.forEach(book => {
-                const saved = JSON.parse(localStorage.getItem('bible_v3_' + book.id)) || [];
-                const el = document.getElementById('count-' + book.id);
-                if (el) el.innerText = `${saved.length} / ${book.chapters}`;
+        function updateMenuProgress() {
+            const all = [...oldTestament, ...newTestament];
+            all.forEach(b => {
+                const saved = JSON.parse(localStorage.getItem('bible_v3_' + b.id)) || [];
+                const el = document.getElementById('cnt-' + b.id);
+                if(el) el.innerText = `${saved.length} / ${b.chapters}`;
             });
         }
 
@@ -242,31 +257,29 @@
         function buildMenus() {
             const oList = document.getElementById('old-list');
             const nList = document.getElementById('new-list');
-            oList.innerHTML = ''; nList.innerHTML = '';
-
             oldTestament.forEach(b => {
                 const d = document.createElement('div'); d.className = 'menu-item';
-                d.innerHTML = `<div>${b.name}</div><span class="count" id="count-${b.id}">0 / ${b.chapters}</span>`;
+                d.innerHTML = `${b.name} <span class="count" id="cnt-${b.id}">0 / ${b.chapters}</span>`;
                 d.onclick = () => selectBook(b, 'old-menu'); oList.appendChild(d);
             });
             newTestament.forEach(b => {
                 const d = document.createElement('div'); d.className = 'menu-item';
-                d.innerHTML = `<div>${b.name}</div><span class="count" id="count-${b.id}">0 / ${b.chapters}</span>`;
+                d.innerHTML = `${b.name} <span class="count" id="cnt-${b.id}">0 / ${b.chapters}</span>`;
                 d.onclick = () => selectBook(b, 'new-menu'); nList.appendChild(d);
             });
         }
 
         function updateGlobalStats() {
-            let totalRead = 0;
-            [...oldTestament, ...newTestament].forEach(book => {
-                const saved = JSON.parse(localStorage.getItem('bible_v3_' + book.id)) || [];
-                totalRead += saved.length;
+            let total = 0;
+            [...oldTestament, ...newTestament].forEach(b => {
+                const saved = JSON.parse(localStorage.getItem('bible_v3_' + b.id)) || [];
+                total += saved.length;
             });
-            totalStats.innerText = `ПРОГРЕСС БИБЛИИ: ${totalRead} / 1189`;
+            totalStats.innerText = `ПРОГРЕСС: ${total} / 1189`;
         }
 
-        function resetCurrentBook() {
-            if (confirm(`Удалить весь прогресс книги ${currentBook.name}?`)) {
+        function resetBook() {
+            if(confirm(`Сбросить весь прогресс книги ${currentBook.name}?`)) {
                 localStorage.removeItem('bible_v3_' + currentBook.id);
                 render();
             }
@@ -285,14 +298,27 @@
                 chapters.sort(() => { s = (s * 9301 + 49297) % 233280; return (s / 233280) - 0.5; });
             }
 
+            let globalIdx = 0;
             for (let i = 0; i < chapters.length; i += 7) {
                 const row = document.createElement('div'); row.className = 'hex-row';
                 chapters.slice(i, i + 7).forEach(num => {
-                    const h = document.createElement('div'); h.className = 'hexagon' + (saved.includes(num) ? ' checked' : '');
+                    const h = document.createElement('div'); 
+                    h.className = 'hexagon' + (saved.includes(num) ? ' checked' : '');
                     h.innerHTML = `<div class="hexagon-inner">${num}</div>`;
+                    
+                    h.classList.add('animate');
+                    h.style.animationDelay = `${globalIdx * 0.02}s`;
+                    globalIdx++;
+
                     h.onclick = () => {
                         let p = JSON.parse(localStorage.getItem('bible_v3_' + currentBook.id)) || [];
-                        if (h.classList.toggle('checked')) p.push(num); else p = p.filter(x => x !== num);
+                        if (h.classList.toggle('checked')) {
+                            p.push(num);
+                            h.style.transform = 'scale(1.2)';
+                            setTimeout(() => h.style.transform = '', 200);
+                        } else {
+                            p = p.filter(x => x !== num);
+                        }
                         localStorage.setItem('bible_v3_' + currentBook.id, JSON.stringify(p));
                         infoText.innerText = `${currentBook.name} ${num} ГЛАВА`;
                         updateGlobalStats();
@@ -307,6 +333,13 @@
         buildMenus();
         modeToggle.onchange = render;
         render();
+
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(() => console.log('PWA Ready'))
+                .catch((err) => console.log('PWA Error', err));
+        }
     </script>
 </body>
 </html>
