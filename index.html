@@ -30,9 +30,17 @@
             position: sticky; top: 0; z-index: 1000; padding: 12px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1);
         }
 
-        .stats-container { text-align: center; margin-bottom: 8px; }
+        .stats-container { text-align: center; margin-bottom: 8px; position: relative; }
         .total-stats { font-size: 10px; font-weight: 800; color: #ff9500; text-transform: uppercase; letter-spacing: 1.2px; }
         .streak-info { font-size: 10px; font-weight: 800; color: var(--apple-green); text-transform: uppercase; margin-top: 2px; }
+
+        /* КНОПКА РАНДОМА */
+        .random-btn {
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            background: #f2f2f7; border: none; border-radius: 10px; padding: 8px;
+            cursor: pointer; font-size: 16px; transition: all 0.2s;
+        }
+        .random-btn:active { transform: translateY(-50%) scale(0.9); background: #e5e5ea; }
 
         .nav-header { display: flex; align-items: center; justify-content: space-between; padding: 0 15px; max-width: 600px; margin: 0 auto; }
         .menu-btn { background: none; border: none; font-size: 10px; font-weight: 800; color: #8e8e93; cursor: pointer; text-transform: uppercase; padding: 10px; }
@@ -60,10 +68,8 @@
             display: flex; flex-direction: column; transition: all 0.2s ease; border: 1px solid transparent;
         }
         
-        /* Цвета состояний книг */
         .menu-item.in-progress { background: var(--gold-gradient); color: #fff; border: none; }
         .menu-item.in-progress span { color: rgba(255,255,255,0.9) !important; }
-        
         .menu-item.completed { border: 1px solid var(--apple-green); background: #f2f2f7; opacity: 0.6; }
         .menu-item.completed span { color: var(--apple-green) !important; }
 
@@ -93,12 +99,10 @@
             background: #ffffff; clip-path: inherit; display: flex; align-items: center; justify-content: center;
             font-size: 13px; font-weight: 700; transition: all 0.3s ease;
         }
-
         .checked .hexagon-inner { background: var(--gold-gradient); color: #ffffff; }
 
         .info-panel { margin-top: 15px; text-align: center; padding-bottom: 40px; }
         .reset-btn { color: var(--apple-red); font-size: 9px; font-weight: 800; border: none; background: none; cursor: pointer; opacity: 0.3; text-transform: uppercase; padding: 10px;}
-        
         .empty-msg { font-size: 12px; color: #8e8e93; text-align: center; grid-column: span 2; padding: 40px; font-weight: 600; }
     </style>
 </head>
@@ -132,6 +136,7 @@
         <div class="stats-container">
             <div class="total-stats" id="total-stats">ПРОГРЕСС: 0 / 1189</div>
             <div class="streak-info" id="streak-info">УДАРНЫЙ РЕЖИМ: 0 ДНЕЙ</div>
+            <button class="random-btn" onclick="getRandomChapter()" title="Случайная глава">🎲</button>
         </div>
         <div class="nav-header">
             <button class="menu-btn" onclick="toggleMenu('old-menu')">ветхий</button>
@@ -171,6 +176,21 @@
             hideCompleted = !hideCompleted;
             localStorage.setItem('hide_completed', hideCompleted);
             updateUIStats();
+        }
+
+        function getRandomChapter() {
+            const allBooks = [...oldT, ...newT];
+            const randomBook = allBooks[Math.floor(Math.random() * allBooks.length)];
+            const randomChapter = Math.floor(Math.random() * randomBook.c) + 1;
+            
+            currentB = randomBook;
+            localStorage.setItem('last_book', JSON.stringify(currentB));
+            render();
+            
+            // Визуальный эффект для привлечения внимания к главе
+            setTimeout(() => {
+                alert(`Ваша случайная глава: ${randomBook.n}, глава ${randomChapter}`);
+            }, 300);
         }
 
         function updateStreak() {
@@ -216,7 +236,8 @@
                     if (isDone) item.classList.add('completed');
                     else if (isStarted) item.classList.add('in-progress');
                     item.style.display = (hideCompleted && isDone) ? 'none' : 'flex';
-                    document.getElementById(`cnt-${b.id}`).innerText = `${count} / ${b.c} • ${percent}%`;
+                    const cntSpan = document.getElementById(`cnt-${b.id}`);
+                    if(cntSpan) cntSpan.innerText = `${count} / ${b.c} • ${percent}%`;
                 }
             });
             checkEmpty('old-list', oldT);
