@@ -14,7 +14,7 @@
             --bg-page: #f2f2f7;
             --gold-gradient: linear-gradient(145deg, #ffcc00, #ff9500);
             --apple-red: #ff3b30;
-            --apple-green: #34c759;
+            --main-orange: #ff9500; /* НОВЫЙ ЦВЕТ */
         }
 
         * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
@@ -30,57 +30,49 @@
             position: sticky; top: 0; z-index: 1000; padding: 12px 0; border-bottom: 0.5px solid rgba(0,0,0,0.1);
         }
 
-        .stats-container { text-align: center; margin-bottom: 8px; position: relative; }
-        .total-stats { font-size: 10px; font-weight: 800; color: #ff9500; text-transform: uppercase; letter-spacing: 1.2px; }
-        .streak-info { font-size: 10px; font-weight: 800; color: var(--apple-green); text-transform: uppercase; margin-top: 2px; }
-
-        /* КНОПКА РАНДОМА */
-        .random-btn {
-            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
-            background: #f2f2f7; border: none; border-radius: 10px; padding: 8px;
-            cursor: pointer; font-size: 16px; transition: all 0.2s;
-        }
-        .random-btn:active { transform: translateY(-50%) scale(0.9); background: #e5e5ea; }
+        .stats-container { text-align: center; margin-bottom: 8px; }
+        .total-stats { font-size: 10px; font-weight: 800; color: var(--main-orange); text-transform: uppercase; letter-spacing: 1.2px; }
+        .streak-info { font-size: 10px; font-weight: 800; color: #34c759; text-transform: uppercase; margin-top: 2px; }
 
         .nav-header { display: flex; align-items: center; justify-content: space-between; padding: 0 15px; max-width: 600px; margin: 0 auto; }
         .menu-btn { background: none; border: none; font-size: 10px; font-weight: 800; color: #8e8e93; cursor: pointer; text-transform: uppercase; padding: 10px; }
         .book-title { font-size: 18px; font-weight: 900; text-transform: uppercase; color: #000; flex-grow: 1; text-align: center; }
+
+        /* СТИЛЬ ПОЛЗУНКОВ (ОРПНЖЕВЫЙ) */
+        .toggle-switch { position: relative; display: inline-block; width: 38px; height: 20px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #d1d1d6; transition: .3s; border-radius: 20px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--main-orange); }
+        input:checked + .slider:before { transform: translateX(18px); }
+
+        .app-container {
+            background: #ffffff; margin: 15px 15px; padding: 35px 10px;
+            border-radius: 35px; box-shadow: 0 10px 40px rgba(0,0,0,0.03);
+            display: flex; flex-direction: column; align-items: center; min-height: 300px;
+        }
+
+        .random-mode-bar {
+            margin-bottom: 20px; display: flex; align-items: center; gap: 10px;
+            background: #f2f2f7; padding: 8px 15px; border-radius: 20px;
+        }
 
         .menu-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(255, 255, 255, 0.98); z-index: 2000; display: none; flex-direction: column; padding: 60px 20px 20px; overflow-y: auto;
         }
 
-        .filter-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; padding: 10px; background: #f2f2f7; border-radius: 12px; }
+        .filter-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 12px; background: #f2f2f7; border-radius: 14px; }
         .filter-label { font-size: 10px; font-weight: 800; color: #8e8e93; text-transform: uppercase; }
-        
-        .toggle-switch { position: relative; display: inline-block; width: 40px; height: 22px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #d1d1d6; transition: .4s; border-radius: 20px; }
-        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 2px; bottom: 2px; background-color: white; transition: .4s; border-radius: 50%; }
-        input:checked + .slider { background-color: var(--apple-green); }
-        input:checked + .slider:before { transform: translateX(18px); }
 
         .menu-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
         .menu-item {
             padding: 16px 10px; border-radius: 16px; background: #f2f2f7; text-align: center;
             font-size: 11px; font-weight: 800; color: #1c1c1e; text-transform: uppercase;
-            display: flex; flex-direction: column; transition: all 0.2s ease; border: 1px solid transparent;
+            display: flex; flex-direction: column; transition: all 0.2s ease;
         }
-        
-        .menu-item.in-progress { background: var(--gold-gradient); color: #fff; border: none; }
-        .menu-item.in-progress span { color: rgba(255,255,255,0.9) !important; }
-        .menu-item.completed { border: 1px solid var(--apple-green); background: #f2f2f7; opacity: 0.6; }
-        .menu-item.completed span { color: var(--apple-green) !important; }
-
-        .menu-item:active { transform: scale(0.96); }
-        .menu-item span { font-size: 9px; opacity: 0.6; margin-top: 4px; font-weight: 700; }
-
-        .app-container {
-            background: #ffffff; margin: 20px 15px; padding: 40px 15px;
-            border-radius: 35px; box-shadow: 0 10px 40px rgba(0,0,0,0.03);
-            display: flex; flex-direction: column; align-items: center; min-height: 300px;
-        }
+        .menu-item.in-progress { background: var(--gold-gradient); color: #fff; }
+        .menu-item.completed { border: 1px solid var(--main-orange); opacity: 0.6; }
 
         .grid-wrapper { line-height: 0; display: inline-block; transition: opacity 0.3s; }
         .hex-row { white-space: nowrap; margin-top: calc(var(--hex-h) * -0.26); display: block; }
@@ -91,22 +83,44 @@
             position: relative; background: var(--hex-border);
             clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
         }
-        .hexagon.animate { animation: hexPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; }
+        .hexagon.animate { animation: hexPop 0.4s forwards; opacity: 0; }
         @keyframes hexPop { from { opacity: 0; transform: scale(0); } to { opacity: 1; transform: scale(1); } }
 
         .hexagon-inner {
             position: absolute; top: 1.5px; left: 1.5px; right: 1.5px; bottom: 1.5px;
             background: #ffffff; clip-path: inherit; display: flex; align-items: center; justify-content: center;
-            font-size: 13px; font-weight: 700; transition: all 0.3s ease;
+            font-size: 13px; font-weight: 700;
         }
         .checked .hexagon-inner { background: var(--gold-gradient); color: #ffffff; }
 
-        .info-panel { margin-top: 15px; text-align: center; padding-bottom: 40px; }
-        .reset-btn { color: var(--apple-red); font-size: 9px; font-weight: 800; border: none; background: none; cursor: pointer; opacity: 0.3; text-transform: uppercase; padding: 10px;}
-        .empty-msg { font-size: 12px; color: #8e8e93; text-align: center; grid-column: span 2; padding: 40px; font-weight: 600; }
+        .info-panel { margin-top: 5px; text-align: center; padding-bottom: 30px; }
+        .reset-btn { color: var(--apple-red); font-size: 9px; font-weight: 800; border: none; background: none; cursor: pointer; opacity: 0.3; text-transform: uppercase; }
     </style>
 </head>
 <body>
+
+    <header>
+        <div class="stats-container">
+            <div class="total-stats" id="total-stats">ПРОГРЕСС: 0 / 1189</div>
+            <div class="streak-info" id="streak-info">УДАРНЫЙ РЕЖИМ: 0 ДНЕЙ</div>
+        </div>
+        <div class="nav-header">
+            <button class="menu-btn" onclick="toggleMenu('old-menu')">ветхий</button>
+            <div class="book-title" id="book-name">БЫТИЕ</div>
+            <button class="menu-btn" onclick="toggleMenu('new-menu')">новый</button>
+        </div>
+    </header>
+
+    <div class="app-container">
+        <div class="random-mode-bar">
+            <div class="filter-label" style="color: #1c1c1e;">Случайный порядок</div>
+            <label class="toggle-switch">
+                <input type="checkbox" id="random-shuffle" onchange="toggleShuffle()">
+                <span class="slider"></span>
+            </label>
+        </div>
+        <div class="grid-wrapper" id="grid"></div>
+    </div>
 
     <div class="menu-overlay" id="old-menu">
         <button onclick="toggleMenu('old-menu')" style="position:fixed; top:20px; right:20px; border:none; background:none; font-size:24px;">✕</button>
@@ -132,23 +146,6 @@
         <div class="menu-list" id="new-list"></div>
     </div>
 
-    <header>
-        <div class="stats-container">
-            <div class="total-stats" id="total-stats">ПРОГРЕСС: 0 / 1189</div>
-            <div class="streak-info" id="streak-info">УДАРНЫЙ РЕЖИМ: 0 ДНЕЙ</div>
-            <button class="random-btn" onclick="getRandomChapter()" title="Случайная глава">🎲</button>
-        </div>
-        <div class="nav-header">
-            <button class="menu-btn" onclick="toggleMenu('old-menu')">ветхий</button>
-            <div class="book-title" id="book-name">БЫТИЕ</div>
-            <button class="menu-btn" onclick="toggleMenu('new-menu')">новый</button>
-        </div>
-    </header>
-
-    <div class="app-container">
-        <div class="grid-wrapper" id="grid"></div>
-    </div>
-
     <div class="info-panel">
         <div id="info-text" style="font-size:11px; font-weight:700; color:#8e8e93; text-transform:uppercase;">выберите главу</div>
         <button class="reset-btn" onclick="resetBook()">Сбросить прогресс книги</button>
@@ -160,6 +157,7 @@
 
         let currentB = JSON.parse(localStorage.getItem('last_book')) || oldT[0];
         let hideCompleted = localStorage.getItem('hide_completed') === 'true';
+        let isRandomMode = localStorage.getItem('random_mode') === 'true';
 
         function toggleMenu(id) {
             const m = document.getElementById(id);
@@ -178,107 +176,43 @@
             updateUIStats();
         }
 
-        function getRandomChapter() {
-            const allBooks = [...oldT, ...newT];
-            const randomBook = allBooks[Math.floor(Math.random() * allBooks.length)];
-            const randomChapter = Math.floor(Math.random() * randomBook.c) + 1;
-            
-            currentB = randomBook;
-            localStorage.setItem('last_book', JSON.stringify(currentB));
+        function toggleShuffle() {
+            isRandomMode = document.getElementById('random-shuffle').checked;
+            localStorage.setItem('random_mode', isRandomMode);
             render();
-            
-            // Визуальный эффект для привлечения внимания к главе
-            setTimeout(() => {
-                alert(`Ваша случайная глава: ${randomBook.n}, глава ${randomChapter}`);
-            }, 300);
-        }
-
-        function updateStreak() {
-            const history = JSON.parse(localStorage.getItem('read_history') || "[]");
-            if (history.length === 0) return 0;
-            const dates = [...new Set(history)].sort().reverse();
-            let today = new Date().toISOString().split('T')[0];
-            let yesterday = new Date(); yesterday.setDate(yesterday.getDate() - 1);
-            yesterday = yesterday.toISOString().split('T')[0];
-            if (dates[0] !== today && dates[0] !== yesterday) return 0;
-            let streak = 0;
-            let check = dates[0] === today ? new Date() : new Date(yesterday);
-            for (let d of dates) {
-                if (d === check.toISOString().split('T')[0]) {
-                    streak++; check.setDate(check.getDate() - 1);
-                } else break;
-            }
-            return streak;
-        }
-
-        function logActivity() {
-            const today = new Date().toISOString().split('T')[0];
-            let history = JSON.parse(localStorage.getItem('read_history') || "[]");
-            if (!history.includes(today)) {
-                history.push(today);
-                localStorage.setItem('read_history', JSON.stringify(history));
-            }
         }
 
         function updateUIStats() {
             let total = 0;
             [...oldT, ...newT].forEach(b => {
                 const saved = JSON.parse(localStorage.getItem('bible_v3_' + b.id)) || [];
-                const count = saved.length;
-                const percent = Math.round((count / b.c) * 100);
-                total += count;
-                
+                total += saved.length;
                 const item = document.getElementById('item-' + b.id);
                 if(item) {
-                    const isDone = count === b.c;
-                    const isStarted = count > 0 && !isDone;
-                    item.classList.remove('completed', 'in-progress');
-                    if (isDone) item.classList.add('completed');
-                    else if (isStarted) item.classList.add('in-progress');
+                    const isDone = saved.length === b.c;
+                    const percent = Math.round((saved.length / b.c) * 100);
+                    item.classList.toggle('completed', isDone);
+                    item.classList.toggle('in-progress', saved.length > 0 && !isDone);
                     item.style.display = (hideCompleted && isDone) ? 'none' : 'flex';
-                    const cntSpan = document.getElementById(`cnt-${b.id}`);
-                    if(cntSpan) cntSpan.innerText = `${count} / ${b.c} • ${percent}%`;
+                    item.querySelector('span').innerText = `${saved.length} / ${b.c} • ${percent}%`;
                 }
             });
-            checkEmpty('old-list', oldT);
-            checkEmpty('new-list', newT);
             document.getElementById('total-stats').innerText = `ПРОГРЕСС: ${total} / 1189`;
-            document.getElementById('streak-info').innerText = `УДАРНЫЙ РЕЖИМ: ${updateStreak()} ДНЕЙ`;
-        }
-
-        function checkEmpty(listId, books) {
-            const container = document.getElementById(listId);
-            const visible = books.filter(b => {
-                const saved = JSON.parse(localStorage.getItem('bible_v3_' + b.id)) || [];
-                return !(hideCompleted && saved.length === b.c);
-            });
-            const oldMsg = container.querySelector('.empty-msg');
-            if (visible.length === 0) {
-                if (!oldMsg) {
-                    const msg = document.createElement('div');
-                    msg.className = 'empty-msg';
-                    msg.innerText = "Все книги прочитаны! 🎉";
-                    container.appendChild(msg);
-                }
-            } else if (oldMsg) oldMsg.remove();
         }
 
         function build() {
             const lists = { 'old-list': oldT, 'new-list': newT };
             for (let id in lists) {
-                const container = document.getElementById(id);
-                container.innerHTML = '';
+                const container = document.getElementById(id); container.innerHTML = '';
                 lists[id].forEach(b => {
                     const d = document.createElement('div');
                     d.className = 'menu-item'; d.id = 'item-' + b.id;
-                    d.innerHTML = `${b.n} <span id="cnt-${b.id}">0 / ${b.c} • 0%</span>`;
-                    d.onclick = () => {
-                        currentB = b; localStorage.setItem('last_book', JSON.stringify(b));
-                        toggleMenu(id.replace('-list','-menu')); render();
-                    };
+                    d.innerHTML = `${b.n} <span style="font-size:9px; opacity:0.6; margin-top:4px;">0 / ${b.c} • 0%</span>`;
+                    d.onclick = () => { currentB = b; localStorage.setItem('last_book', JSON.stringify(b)); toggleMenu(id.replace('-list','-menu')); render(); };
                     container.appendChild(d);
                 });
             }
+            document.getElementById('random-shuffle').checked = isRandomMode;
         }
 
         function render() {
@@ -287,38 +221,35 @@
             setTimeout(() => {
                 g.innerHTML = '';
                 const saved = JSON.parse(localStorage.getItem('bible_v3_' + currentB.id)) || [];
-                for (let i = 0; i < currentB.c; i += 7) {
+                let chapters = Array.from({length: currentB.c}, (_, i) => i + 1);
+                if (isRandomMode) chapters.sort(() => Math.random() - 0.5);
+
+                for (let i = 0; i < chapters.length; i += 7) {
                     const row = document.createElement('div'); row.className = 'hex-row';
-                    for(let j=1; j<=7 && (i+j)<=currentB.c; j++) {
-                        const num = i+j;
+                    chapters.slice(i, i + 7).forEach((num, index) => {
                         const h = document.createElement('div');
                         h.className = 'hexagon animate' + (saved.includes(num) ? ' checked' : '');
-                        h.style.animationDelay = (j * 0.04) + 's';
+                        h.style.animationDelay = (index * 0.04) + 's';
                         h.innerHTML = `<div class="hexagon-inner">${num}</div>`;
                         h.onclick = () => {
                             if (window.navigator.vibrate) window.navigator.vibrate(15);
                             let p = JSON.parse(localStorage.getItem('bible_v3_' + currentB.id)) || [];
-                            if(h.classList.toggle('checked')) { p.push(num); logActivity(); }
-                            else p = p.filter(x => x !== num);
+                            if(h.classList.toggle('checked')) p.push(num); else p = p.filter(x => x !== num);
                             localStorage.setItem('bible_v3_' + currentB.id, JSON.stringify(p));
                             updateUIStats();
                         };
                         row.appendChild(h);
-                    }
+                    });
                     g.appendChild(row);
                 }
-                g.style.opacity = '1';
-                updateUIStats();
+                g.style.opacity = '1'; updateUIStats();
             }, 150);
         }
 
-        function resetBook() {
-            if(confirm('Сбросить прогресс этой книги?')) { 
-                localStorage.removeItem('bible_v3_'+currentB.id); render(); 
-            }
-        }
+        function resetBook() { if(confirm('Сбросить прогресс книги?')) { localStorage.removeItem('bible_v3_'+currentB.id); render(); } }
 
         build(); render();
+        if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
     </script>
 </body>
 </html>

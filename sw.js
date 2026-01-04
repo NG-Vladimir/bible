@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bible-tracker-v4'; // Поменяйте v3 на v4
+const CACHE_NAME = 'bible-tracker-v11'; // Подняли версию
 const ASSETS = [
   './',
   './index.html',
@@ -7,8 +7,7 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', (event) => {
-  // Пропускаем ожидание, чтобы новый код активировался сразу
-  self.skipWaiting(); 
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
   );
@@ -26,6 +25,6 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   event.respondWith(
-    caches.match(event.request).then((res) => res || fetch(event.request))
+    caches.match(event.request).then((response) => response || fetch(event.request))
   );
 });
